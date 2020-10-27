@@ -152,6 +152,8 @@ opencart_initialize() {
             info "Upgrading database schema"
             opencart_upgrade
         fi
+        info "Updating Opencart hostname"
+        opencart_update_hostname "${OPENCART_HOST:-localhost}"
 
         info "Persisting OpenCart installation"
         persist_app "$app_name" "$OPENCART_DATA_TO_PERSIST"
@@ -348,4 +350,27 @@ opencart_protect_storage_dir() {
     cp -rp "${OPENCART_BASE_DIR}/system/storage/"* "$OPENCART_STORAGE_DIR"
     opencart_conf_set DIR_STORAGE "${OPENCART_STORAGE_DIR}/"
     opencart_conf_set DIR_STORAGE "${OPENCART_STORAGE_DIR}/" "$OPENCART_ADMIN_CONF_FILE"
+}
+
+########################
+# Update Opencart hostname
+# Globals:
+#   OPENCART_*
+# Arguments:
+#   $1 - PHP constant name
+# Returns:
+#   None
+#########################
+opencart_update_hostname() {
+    local -r hostname="${1:?missing hostname}"
+
+    # Set URL store configuration file
+    opencart_conf_set HTTP_SERVER "http://${hostname}/"
+    opencart_conf_set HTTPS_SERVER "https://${hostname}/"
+
+    # Set URL in admin configuration file
+    opencart_conf_set HTTP_SERVER "http://${hostname}/admin/" "$OPENCART_ADMIN_CONF_FILE"
+    opencart_conf_set HTTP_CATALOG "http://${hostname}/" "$OPENCART_ADMIN_CONF_FILE"
+    opencart_conf_set HTTPS_SERVER "https://${hostname}/admin/" "$OPENCART_ADMIN_CONF_FILE"
+    opencart_conf_set HTTPS_CATALOG "https://${hostname}/" "$OPENCART_ADMIN_CONF_FILE"
 }
