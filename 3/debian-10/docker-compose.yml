@@ -11,12 +11,10 @@ services:
   opencart:
     image: 'docker.io/bitnami/opencart:3-debian-10'
     ports:
-      - '8080:8080'
-      - '8443:8443'
+      - '80:8080'
+      - '443:8443'
     environment:
       - OPENCART_HOST=localhost
-      - OPENCART_EXTERNAL_HTTP_PORT=8080
-      - OPENCART_EXTERNAL_HTTPS_PORT=8443
       - OPENCART_DATABASE_HOST=mariadb
       - OPENCART_DATABASE_PORT_NUMBER=3306
       - OPENCART_DATABASE_USER=bn_opencart
