@@ -357,7 +357,7 @@ opencart_protect_storage_dir() {
 # Globals:
 #   OPENCART_*
 # Arguments:
-#   $1 - PHP constant name
+#   $1 - hostname in the form <host>[:<port>]
 # Returns:
 #   None
 #########################
